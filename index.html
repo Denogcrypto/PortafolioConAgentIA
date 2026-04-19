@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dennis Ferraro — Automation Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --card: #16161f;
+      --border: #2a2a3a;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --accent3: #06b6d4;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --green: #10b981;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUND GLOW ── */
+    .bg-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(124,58,237,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 80% 80%, rgba(6,182,212,0.08) 0%, transparent 70%);
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 8px;
+      font-weight: 600 !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 5rem 4rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.35);
+      color: var(--accent2);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-role {
+      font-size: 1.15rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      padding: 0.75rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      padding: 0.75rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { border-color: var(--accent2); transform: translateY(-1px); }
+
+    /* ── CHAT CARD (hero right) ── */
+    .chat-preview {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,58,237,0.1);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      background: rgba(124,58,237,0.08);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .chat-header-info strong {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .chat-header-info span {
+      font-size: 0.75rem;
+      color: var(--green);
+    }
+
+    .chat-body {
+      height: 420px;
+    }
+
+    .chat-body iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ── SKILLS SECTION ── */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 5rem 5rem;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+      max-width: 560px;
+    }
+
+    /* ── SKILLS GRID ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-2px);
+    }
+
+    .skill-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .skill-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .skill-type {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .exp-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .exp-card:hover { border-color: var(--accent2); }
+
+    .exp-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .exp-company {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .exp-role {
+      font-size: 0.85rem;
+      color: var(--accent2);
+      font-weight: 500;
+      margin-top: 0.2rem;
+    }
+
+    .exp-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(16,185,129,0.12);
+      color: var(--green);
+      border: 1px solid rgba(16,185,129,0.25);
+      white-space: nowrap;
+    }
+
+    .exp-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── ACHIEVEMENTS ── */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .ach-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .ach-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-3px);
+    }
+
+    .ach-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .ach-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .ach-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CHAT SECTION ── */
+    .chat-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 5rem 5rem;
+    }
+
+    .chat-full-wrapper {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .chat-full-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.75rem;
+      background: rgba(124,58,237,0.08);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-full-avatar {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .chat-full-info strong {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .chat-full-info span {
+      font-size: 0.8rem;
+      color: var(--green);
+    }
+
+    .chat-full-body {
+      height: 600px;
+      position: relative;
+    }
+
+    #n8n-chat-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    #n8n-chat-container .n8n-chat {
+      height: 600px;
+      border-radius: 0;
+    }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .contact-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-2px);
+    }
+
+    .contact-card .icon { font-size: 1.4rem; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 6rem 1.5rem 3rem;
+        text-align: center;
+      }
+      .hero-desc { max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero-btns { justify-content: center; }
+      .section, .chat-section { padding: 3rem 1.5rem; }
+      .divider { margin: 0 1.5rem; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .achievements-grid { grid-template-columns: 1fr; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow"></div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-logo">Dennis Ferraro</div>
+    <ul class="nav-links">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#chat">Agente IA</a></li>
+      <li><a href="#contact" class="nav-cta">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Disponible para nuevas oportunidades
+      </div>
+      <h1>Hola, soy<br /><span>Dennis Ferraro</span></h1>
+      <p class="hero-role">Automation Developer · IA Engineer · DevOps</p>
+      <p class="hero-desc">
+        Diseño y desarrollo automatizaciones end-to-end con n8n, Apache Airflow y GCP.
+        Construyo agentes de IA, integro APIs y despliego aplicaciones con Docker en entornos cloud y blockchain.
+      </p>
+      <div class="hero-btns">
+        <a href="#chat" class="btn-primary">🤖 Hablar con mi agente</a>
+        <a href="https://www.linkedin.com/in/dennis-ferraro-7ab03b241/" target="_blank" class="btn-secondary">💼 LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <p class="section-label">Stack tecnológico</p>
+    <h2 class="section-title">Herramientas & Skills</h2>
+    <p class="section-sub">Tecnologías con las que trabajo día a día para construir automatizaciones robustas y escalables.</p>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <span class="skill-icon">⚡</span>
+        <div>
+          <div class="skill-name">n8n</div>
+          <div class="skill-type">Automatización</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🐍</span>
+        <div>
+          <div class="skill-name">Python</div>
+          <div class="skill-type">Lenguaje</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🐳</span>
+        <div>
+          <div class="skill-name">Docker</div>
+          <div class="skill-type">DevOps</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🗄️</span>
+        <div>
+          <div class="skill-name">SQL / Supabase</div>
+          <div class="skill-type">Base de datos</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🌊</span>
+        <div>
+          <div class="skill-name">Apache Airflow</div>
+          <div class="skill-type">Orquestación</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">☁️</span>
+        <div>
+          <div class="skill-name">Google Cloud</div>
+          <div class="skill-type">Cloud</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🔗</span>
+        <div>
+          <div class="skill-name">APIs REST</div>
+          <div class="skill-type">Integración</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">⛓️</span>
+        <div>
+          <div class="skill-name">Blockchain</div>
+          <div class="skill-type">Smart Contracts</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🤖</span>
+        <div>
+          <div class="skill-name">IA / Agentes</div>
+          <div class="skill-type">IA Engineer</div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <span class="skill-icon">🐧</span>
+        <div>
+          <div class="skill-name">Linux</div>
+          <div class="skill-type">Sistemas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <p class="section-label">Trayectoria</p>
+    <h2 class="section-title">Experiencia & Logros</h2>
+    <p class="section-sub">Proyectos y roles que definen mi perfil profesional.</p>
+
+    <div class="exp-grid" style="margin-bottom: 2.5rem;">
+      <div class="exp-card">
+        <div class="exp-card-top">
+          <div>
+            <div class="exp-company">Clarín</div>
+            <div class="exp-role">Automation Developer</div>
+          </div>
+          <span class="exp-badge">Actual · 1 año</span>
+        </div>
+        <p class="exp-desc">
+          Desarrollo de automatizaciones y workflows para optimizar procesos internos en uno de los medios de comunicación más grandes de Argentina. Integración de sistemas, APIs y flujos de datos con n8n y GCP.
+        </p>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-card-top">
+          <div>
+            <div class="exp-company">Blockchain & Web3</div>
+            <div class="exp-role">Smart Contract Developer</div>
+          </div>
+          <span class="exp-badge" style="background:rgba(124,58,237,0.12);color:var(--accent2);border-color:rgba(124,58,237,0.25);">Proyectos</span>
+        </div>
+        <p class="exp-desc">
+          Integraciones de pagos en blockchain y despliegue de contratos inteligentes en diferentes redes. Automatización de procesos on-chain con Python y APIs de blockchain.
+        </p>
+      </div>
+    </div>
+
+    <div class="achievements-grid">
+      <div class="ach-card">
+        <div class="ach-icon">🏆</div>
+        <div class="ach-title">2° Puesto — Hackathon UCEMA</div>
+        <p class="ach-desc">Lideré el desarrollo de una app que alcanzó el segundo puesto en el hackathon de la Universidad del CEMA.</p>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">👥</div>
+        <div class="ach-title">Liderazgo de +40 personas</div>
+        <p class="ach-desc">Experiencia liderando equipos de más de 40 personas, coordinando tareas técnicas y no técnicas.</p>
+      </div>
+      <div class="ach-card">
+        <div class="ach-icon">⛓️</div>
+        <div class="ach-title">Integraciones Blockchain</div>
+        <p class="ach-desc">Desarrollo de contratos inteligentes e integraciones de pagos en múltiples redes blockchain.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CHAT SECTION -->
+  <section class="chat-section" id="chat">
+    <p class="section-label">Agente IA</p>
+    <h2 class="section-title">Hablá con mi agente</h2>
+    <p class="section-sub">Preguntale lo que quieras sobre mi perfil, experiencia, skills o disponibilidad. Está disponible 24/7.</p>
+
+    <div class="chat-full-wrapper">
+      <div class="chat-full-header">
+        <div class="chat-full-avatar">🤖</div>
+        <div class="chat-full-info">
+          <strong>Agente de Dennis Ferraro</strong>
+          <span>● En línea — Responde al instante</span>
+        </div>
+      </div>
+      <div class="chat-full-body">
+        <div id="n8n-chat-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <p class="section-label">Contacto</p>
+    <h2 class="section-title">¿Hablamos?</h2>
+    <p class="section-sub">Estoy abierto a nuevas oportunidades. Podés encontrarme en:</p>
+
+    <div class="contact-grid">
+      <a href="https://www.linkedin.com/in/dennis-ferraro-7ab03b241/" target="_blank" class="contact-card">
+        <span class="icon">💼</span>
+        <div>
+          <div style="font-weight:600;">LinkedIn</div>
+          <div style="font-size:0.78rem;color:var(--muted);">dennis-ferraro-7ab03b241</div>
+        </div>
+      </a>
+      <a href="https://github.com/Denogcrypto" target="_blank" class="contact-card">
+        <span class="icon">🐙</span>
+        <div>
+          <div style="font-weight:600;">GitHub</div>
+          <div style="font-size:0.78rem;color:var(--muted);">Denogcrypto</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Dennis Ferraro — Automation Developer · Hecho con n8n & IA</p>
+  </footer>
+
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+    createChat({
+      webhookUrl: 'https://render-n8n-tum6.onrender.com/webhook/6a26f554-5c90-4a68-9bef-0f644065e562/chat',
+      target: '#n8n-chat-container',
+      mode: 'fullscreen',
+      showWelcomeScreen: true,
+      initialMessages: [
+        '👋 ¡Hola! Soy el agente virtual de Dennis Ferraro, Automation Developer.',
+        'Puedo contarte sobre sus skills, experiencia, logros y disponibilidad. ¿Qué querés saber?'
+      ],
+      i18n: {
+        en: {
+          title: 'Agente de Dennis Ferraro',
+          subtitle: 'Automation Developer · IA Engineer · DevOps',
+          inputPlaceholder: 'Escribí tu pregunta...',
+          getStarted: 'Iniciar conversación',
+          closeButtonTooltip: 'Cerrar chat',
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
